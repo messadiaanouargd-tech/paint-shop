@@ -830,169 +830,94 @@
             padding-bottom: 10px;
         }
     
-        /* ========== Camera Barcode Scanner CSS ========== */
-        .barcode-input-with-camera {
+        /* Camera Button Fix */
+        .barcode-wrapper {
             display: flex;
-            gap: 10px;
-            align-items: center;
+            align-items: stretch;
+            gap: 8px;
+            width: 100%;
         }
 
-        .barcode-input-with-camera input {
+        .barcode-wrapper input {
             flex: 1;
+            border-radius: 10px !important;
         }
 
-        .camera-trigger-btn {
+        .camera-btn {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
             border: none;
-            padding: 12px 18px;
+            color: white;
+            padding: 0 20px;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 22px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            min-width: 55px;
+            font-size: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+            min-width: 60px;
         }
 
-        .camera-trigger-btn:hover {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        .camera-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .camera-btn:active {
+            transform: scale(0.95);
         }
 
         /* Modal Styles */
-        #cameraModal {
+        #scanner-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
+            background: rgba(0,0,0,0.9);
+            z-index: 99999;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        #cameraModal.active {
+        #scanner-modal.active {
             display: flex;
-            animation: fadeIn 0.3s;
         }
 
-        .camera-modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 650px;
+        #scanner-video {
             width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .camera-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .camera-modal-header h2 {
-            color: var(--dark);
-            margin: 0;
-            font-size: 22px;
-        }
-
-        .camera-close-btn {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: #6b7280;
-            transition: all 0.2s;
-            padding: 5px;
-            line-height: 1;
-        }
-
-        .camera-close-btn:hover {
-            color: var(--danger);
-        }
-
-        #scanVideoContainer {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
+            max-width: 600px;
+            height: 60vh;
             background: #000;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        #scanVideo {
-            width: 100%;
-            height: 350px;
+            border-radius: 15px;
             object-fit: cover;
+            border: 2px solid #333;
         }
 
-        .scan-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            height: 140px;
-            border: 3px dashed #10b981;
-            border-radius: 12px;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
-            pointer-events: none;
+        .scanner-controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            width: 90%;
+            max-width: 600px;
         }
 
-        .scan-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #10b981, transparent);
-            box-shadow: 0 0 10px #10b981;
-            animation: scanAnim 2s ease-in-out infinite;
-        }
-
-        @keyframes scanAnim {
-            0%, 100% { transform: translateY(0); opacity: 0.5; }
-            50% { transform: translateY(140px); opacity: 1; }
-        }
-
-        .scan-status-box {
+        .scanner-btn {
+            flex: 1;
             padding: 15px;
-            border-radius: 12px;
-            text-align: center;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
             font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            transition: all 0.3s;
+            cursor: pointer;
         }
 
-        .scan-status-box.ready {
-            background: #dbeafe;
-            color: #1e40af;
-            border: 2px solid #3b82f6;
-        }
-
-        .scan-status-box.success {
-            background: #d1fae5;
-            color: #065f46;
-            border: 2px solid #10b981;
-        }
-
-        .scan-status-box.error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 2px solid #ef4444;
-        }
-
-    </style>
+        .close-scan { background: #ef4444; color: white; }
+        .switch-cam { background: #3b82f6; color: white; }
+</style>
 </head>
 <body>
 
@@ -1311,9 +1236,9 @@
                     </div>
                     <div class="form-group">
                         <label>الباركود:</label>
-                        <div class="barcode-input-with-camera">
-                            <input type="text" id="productBarcode" required placeholder="اكتب أو امسح بالكاميرا">
-                            <button type="button" class="camera-trigger-btn" onclick="openCameraScanner('product')" title="مسح بالكاميرا">📷</button>
+                        <div class="barcode-wrapper">
+                            <input type="text" id="productBarcode" required placeholder="اكتب أو امسح...">
+                            <button type="button" class="camera-btn" onclick="startScanner('product')" title="فتح الكاميرا">📷</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1353,9 +1278,147 @@
         <!-- Invoice will be generated here -->
     </div>
 
-    <script src="https://unpkg.com/@zxing/library@latest/umd/index.min.js"></script>
     <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js">
+// Global Scanner Variables
+let codeReader = null;
+let currentScanMode = null; // 'pos' or 'product'
+
+function startScanner(mode) {
+    currentScanMode = mode;
+    const modal = document.getElementById('scanner-modal');
+    const video = document.getElementById('scanner-video');
+
+    modal.classList.add('active');
+
+    codeReader = new ZXing.BrowserMultiFormatReader();
+
+    codeReader.listVideoInputDevices()
+        .then((videoInputDevices) => {
+            if (videoInputDevices.length === 0) {
+                alert('لا توجد كاميرا!');
+                stopScanner();
+                return;
+            }
+
+            // Prefer back camera
+            let selectedDeviceId = videoInputDevices[0].deviceId;
+            videoInputDevices.forEach(device => {
+                if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear')) {
+                    selectedDeviceId = device.deviceId;
+                }
+            });
+
+            return codeReader.decodeFromVideoDevice(selectedDeviceId, 'scanner-video', (result, err) => {
+                if (result) {
+                    console.log(result);
+                    handleScanResult(result.text);
+                }
+                if (err && !(err instanceof ZXing.NotFoundException)) {
+                    console.error(err);
+                }
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            alert('خطأ في تشغيل الكاميرا: ' + err);
+            stopScanner();
+        });
+}
+
+function handleScanResult(code) {
+    // Play beep
+    playSound('success');
+
+    if (currentScanMode === 'pos') {
+        const input = document.getElementById('barcodeScanner');
+        input.value = code;
+        addProductByBarcode(code); // Trigger existing add function
+    } else {
+        document.getElementById('productBarcode').value = code;
+    }
+
+    stopScanner();
+}
+
+function stopScanner() {
+    if (codeReader) {
+        codeReader.reset();
+        codeReader = null;
+    }
+    document.getElementById('scanner-modal').classList.remove('active');
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+// Global Scanner Variables
+let codeReader = null;
+let currentScanMode = null; // 'pos' or 'product'
+
+function startScanner(mode) {
+    currentScanMode = mode;
+    const modal = document.getElementById('scanner-modal');
+    const video = document.getElementById('scanner-video');
+
+    modal.classList.add('active');
+
+    codeReader = new ZXing.BrowserMultiFormatReader();
+
+    codeReader.listVideoInputDevices()
+        .then((videoInputDevices) => {
+            if (videoInputDevices.length === 0) {
+                alert('لا توجد كاميرا!');
+                stopScanner();
+                return;
+            }
+
+            // Prefer back camera
+            let selectedDeviceId = videoInputDevices[0].deviceId;
+            videoInputDevices.forEach(device => {
+                if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear')) {
+                    selectedDeviceId = device.deviceId;
+                }
+            });
+
+            return codeReader.decodeFromVideoDevice(selectedDeviceId, 'scanner-video', (result, err) => {
+                if (result) {
+                    console.log(result);
+                    handleScanResult(result.text);
+                }
+                if (err && !(err instanceof ZXing.NotFoundException)) {
+                    console.error(err);
+                }
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            alert('خطأ في تشغيل الكاميرا: ' + err);
+            stopScanner();
+        });
+}
+
+function handleScanResult(code) {
+    // Play beep
+    playSound('success');
+
+    if (currentScanMode === 'pos') {
+        const input = document.getElementById('barcodeScanner');
+        input.value = code;
+        addProductByBarcode(code); // Trigger existing add function
+    } else {
+        document.getElementById('productBarcode').value = code;
+    }
+
+    stopScanner();
+}
+
+function stopScanner() {
+    if (codeReader) {
+        codeReader.reset();
+        codeReader = null;
+    }
+    document.getElementById('scanner-modal').classList.remove('active');
+}
+</script>
 
     <script>
 
@@ -2514,32 +2577,83 @@
             oscillator.start();
             setTimeout(() => oscillator.stop(), 100);
         }
-    </script>
+    
+// Global Scanner Variables
+let codeReader = null;
+let currentScanMode = null; // 'pos' or 'product'
 
-    <!-- Camera Scanner Modal -->
-    <div id="cameraModal">
-        <div class="camera-modal-content">
-            <div class="camera-modal-header">
-                <h2>📷 ماسح الباركود</h2>
-                <button class="camera-close-btn" onclick="closeCameraScanner()">✕</button>
-            </div>
+function startScanner(mode) {
+    currentScanMode = mode;
+    const modal = document.getElementById('scanner-modal');
+    const video = document.getElementById('scanner-video');
 
-            <div id="scanVideoContainer">
-                <video id="scanVideo" playsinline></video>
-                <div class="scan-overlay">
-                    <div class="scan-line"></div>
-                </div>
-            </div>
+    modal.classList.add('active');
 
-            <div class="scan-status-box ready" id="scanStatus">
-                ⏳ جاري تحميل الكاميرا...
-            </div>
+    codeReader = new ZXing.BrowserMultiFormatReader();
 
-            <button class="btn btn-danger" onclick="closeCameraScanner()" style="width: 100%; padding: 12px; font-size: 16px;">
-                ⏹️ إيقاف وإغلاق
-            </button>
-        </div>
+    codeReader.listVideoInputDevices()
+        .then((videoInputDevices) => {
+            if (videoInputDevices.length === 0) {
+                alert('لا توجد كاميرا!');
+                stopScanner();
+                return;
+            }
+
+            // Prefer back camera
+            let selectedDeviceId = videoInputDevices[0].deviceId;
+            videoInputDevices.forEach(device => {
+                if (device.label.toLowerCase().includes('back') || device.label.toLowerCase().includes('rear')) {
+                    selectedDeviceId = device.deviceId;
+                }
+            });
+
+            return codeReader.decodeFromVideoDevice(selectedDeviceId, 'scanner-video', (result, err) => {
+                if (result) {
+                    console.log(result);
+                    handleScanResult(result.text);
+                }
+                if (err && !(err instanceof ZXing.NotFoundException)) {
+                    console.error(err);
+                }
+            });
+        })
+        .catch((err) => {
+            console.error(err);
+            alert('خطأ في تشغيل الكاميرا: ' + err);
+            stopScanner();
+        });
+}
+
+function handleScanResult(code) {
+    // Play beep
+    playSound('success');
+
+    if (currentScanMode === 'pos') {
+        const input = document.getElementById('barcodeScanner');
+        input.value = code;
+        addProductByBarcode(code); // Trigger existing add function
+    } else {
+        document.getElementById('productBarcode').value = code;
+    }
+
+    stopScanner();
+}
+
+function stopScanner() {
+    if (codeReader) {
+        codeReader.reset();
+        codeReader = null;
+    }
+    document.getElementById('scanner-modal').classList.remove('active');
+}
+</script>
+
+<div id="scanner-modal">
+    <div style="color: white; margin-bottom: 10px; font-size: 18px;">📷 وجّه الكاميرا نحو الباركود</div>
+    <video id="scanner-video" playsinline></video>
+    <div class="scanner-controls">
+        <button class="scanner-btn close-scan" onclick="stopScanner()">❌ إغلاق</button>
     </div>
-
+</div>
 </body>
 </html>
